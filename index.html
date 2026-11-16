@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday, Aviva Qomaria! ✨</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #FFF9FA;
+      --pink-soft: #FCE7F3;
+      --pink-accent: #EC4899;
+      --pink-deep: #BE185D;
+      --text-main: #3B2832;
+      --text-muted: #7A5C6B;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(251, 207, 232, 0.35) 0%, transparent 45%),
+        radial-gradient(circle at 85% 60%, rgba(253, 230, 138, 0.25) 0%, transparent 45%);
+    }
+
+    .font-serif-display {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Glassmorphism Nav */
+    .glass-pill {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(244, 114, 182, 0.25);
+      box-shadow: 0 10px 30px -5px rgba(236, 72, 153, 0.12);
+    }
+
+    /* Polaroid Frame */
+    .polaroid-card {
+      background: #FFFFFF;
+      padding: 12px 12px 22px 12px;
+      border-radius: 6px;
+      box-shadow: 0 12px 28px -6px rgba(59, 40, 50, 0.12), 0 4px 10px -2px rgba(236, 72, 153, 0.08);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+    }
+    .polaroid-card:hover {
+      transform: translateY(-6px) rotate(0deg) scale(1.02) !important;
+      box-shadow: 0 20px 36px -8px rgba(236, 72, 153, 0.22);
+      z-index: 20;
+    }
+
+    /* Envelope Letter Animation */
+    .envelope-wrapper {
+      perspective: 1200px;
+    }
+    .letter-paper {
+      background: linear-gradient(180deg, #FFFFFF 0%, #FFF5F8 100%);
+      border: 1px solid #FBCFE8;
+      box-shadow: 0 20px 45px -15px rgba(190, 24, 93, 0.15);
+    }
+
+    /* Floating Sparkles */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(6deg); }
+    }
+    .animate-float {
+      animation: floatSlow 5s ease-in-out infinite;
+    }
+
+    /* Equalizer Bars */
+    @keyframes eqBar {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+    .eq-playing span:nth-child(1) { animation: eqBar 0.6s ease-in-out infinite; }
+    .eq-playing span:nth-child(2) { animation: eqBar 0.45s ease-in-out infinite 0.15s; }
+    .eq-playing span:nth-child(3) { animation: eqBar 0.7s ease-in-out infinite 0.3s; }
+    .eq-playing span:nth-child(4) { animation: eqBar 0.5s ease-in-out infinite 0.1s; }
+  </style>
+</head>
+<body class="antialiased selection:bg-pink-200 selection:text-pink-900">
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 transform -translate-y-3">
+    <div id="toastBox" class="px-5 py-3 rounded-2xl shadow-xl text-sm font-medium flex items-center gap-2.5 bg-gray-900 text-white">
+      <span id="toastIcon">✨</span>
+      <span id="toastMsg">Pesan notifikasi</span>
+    </div>
+  </div>
+
+  <!-- Top Floating Navigation & Music Player -->
+  <header class="sticky top-4 z-40 px-4">
+    <nav class="max-w-3xl mx-auto glass-pill rounded-full px-4 py-2.5 flex items-center justify-between gap-3">
+      <!-- Music Control -->
+      <button id="musicToggleBtn" class="flex items-center gap-3 text-left group focus:outline-none">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center shadow-md group-hover:scale-105 transition">
+          <svg id="playIcon" class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="pauseIcon" class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-gray-800 leading-tight">Happy Birthday Song</p>
+          <p id="musicStatusText" class="text-[11px] text-pink-500 font-medium">Tap to play music ♡</p>
+        </div>
+        <div id="eqBars" class="hidden sm:flex items-end gap-0.5 h-4 ml-1">
+          <span class="w-1 h-1 bg-pink-400 rounded-full"></span>
+          <span class="w-1 h-1 bg-pink-400 rounded-full"></span>
+          <span class="w-1 h-1 bg-pink-400 rounded-full"></span>
+          <span class="w-1 h-1 bg-pink-400 rounded-full"></span>
+        </div>
+      </button>
+
+      <!-- Section Links -->
+      <div class="flex items-center gap-3 sm:gap-5 text-xs sm:text-sm font-medium text-gray-600">
+        <a href="#ucapan" class="hover:text-pink-600 transition">Ucapan</a>
+        <a href="#usia" class="hover:text-pink-600 transition">Usia</a>
+        <a href="#galeri" class="hover:text-pink-600 transition">Galeri</a>
+        <a href="#video" class="hover:text-pink-600 transition">Video</a>
+        <a href="#surat" class="hover:text-pink-600 transition">Surat</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="ucapan" class="relative pt-14 pb-16 px-4 text-center max-w-4xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-100/80 border border-pink-200 text-pink-600 text-xs font-semibold tracking-wider uppercase mb-6 animate-float">
+      <span>🎂</span> 17 November 2006 — Special Day
+    </div>
+
+    <h1 class="font-serif-display text-5xl sm:text-7xl font-bold text-gray-900 leading-tight tracking-tight">
+      Happy Birthday,<br />
+      <span class="italic text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500">
+        Aviva Qomaria
+      </span>
+    </h1>
+
+    <p class="mt-6 text-base sm:text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
+      Selamat bertambah usia untuk sosok yang selalu membawa kehangatan dan senyum manis. Semoga di usia yang baru ini, setiap langkahmu dipenuhi kebahagiaan, kesehatan, dan hal-hal indah yang kamu impikan. ✨
+    </p>
+
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <button id="celebrateBtn" class="px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold text-sm shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 hover:-translate-y-0.5 transition">
+        🎉 Rayakan Sekarang!
+      </button>
+      <a href="#surat" class="px-6 py-3 rounded-full bg-white border border-pink-200 text-pink-600 font-semibold text-sm hover:bg-pink-50 transition">
+        💌 Baca Surat Spesial
+      </a>
+    </div>
+  </section>
+
+  <!-- Age & Live Counter Section -->
+  <section id="usia" class="py-12 px-4 max-w-4xl mx-auto">
+    <div class="bg-white/90 backdrop-blur-md border border-pink-100 rounded-3xl p-6 sm:p-10 shadow-xl shadow-pink-500/5 text-center">
+      <p class="text-xs font-bold uppercase tracking-widest text-pink-500">Journey of Life</p>
+      <h2 class="font-serif-display text-3xl sm:text-4xl font-bold text-gray-900 mt-1">
+        Perjalanan Waktu Aviva
+      </h2>
+      <p class="text-sm text-gray-500 mt-1">Dihitung sejak 17 November 2006</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-8">
+        <div class="bg-pink-50/70 border border-pink-100 rounded-2xl p-4">
+          <div id="ageYears" class="font-serif-display text-3xl sm:text-4xl font-bold text-pink-600">20</div>
+          <div class="text-xs font-medium text-gray-500 mt-1">Tahun</div>
+        </div>
+        <div class="bg-pink-50/70 border border-pink-100 rounded-2xl p-4">
+          <div id="ageDays" class="font-serif-display text-3xl sm:text-4xl font-bold text-rose-500">0</div>
+          <div class="text-xs font-medium text-gray-500 mt-1">Total Hari</div>
+        </div>
+        <div class="bg-pink-50/70 border border-pink-100 rounded-2xl p-4">
+          <div id="ageHours" class="font-serif-display text-3xl sm:text-4xl font-bold text-amber-600">0</div>
+          <div class="text-xs font-medium text-gray-500 mt-1">Total Jam</div>
+        </div>
+        <div class="bg-pink-50/70 border border-pink-100 rounded-2xl p-4">
+          <div id="ageSeconds" class="font-serif-display text-3xl sm:text-4xl font-bold text-pink-600">0</div>
+          <div class="text-xs font-medium text-gray-500 mt-1">Detik Berharga</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Polaroid Photo Gallery Section -->
+  <section id="galeri" class="py-14 px-4 max-w-5xl mx-auto">
+    <div class="text-center">
+      <span class="inline-block px-3 py-1 rounded-full bg-pink-100 text-pink-600 text-[11px] font-bold tracking-widest uppercase">
+        Sweet Snapshots
+      </span>
+      <h2 class="font-serif-display text-4xl sm:text-5xl font-bold text-gray-900 mt-2">
+        Aviva's <span class="italic font-normal">Polaroid Memories</span> 📸
+      </h2>
+      <p class="text-sm text-gray-500 mt-2">
+        Simpan momen terbaikmu dalam bingkai polaroid yang manis
+      </p>
+    </div>
+
+    <!-- Upload Box & Cloud Status -->
+    <div class="mt-8 max-w-2xl mx-auto bg-white/80 border-2 border-dashed border-pink-200 rounded-3xl p-6 text-center shadow-sm">
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <button id="cloudStatusBadge" type="button" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-50 border border-pink-200 text-xs font-medium text-pink-700 hover:bg-pink-100 transition">
+          <span id="cloudDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="cloudStatusText">Menghubungkan ke Cloud...</span>
+        </button>
+      </div>
+
+      <label for="photoInput" class="cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold text-sm shadow-md shadow-pink-500/20 hover:opacity-95 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <span>Tambah Foto Kenangan (Bisa Banyak)</span>
+      </label>
+      <input id="photoInput" type="file" accept="image/*" multiple class="hidden" />
+
+      <p class="text-xs text-gray-400 mt-3">
+        Foto otomatis tersinkronisasi ke Cloud sehingga bisa dilihat dari HP maupun laptop lain ♡
+      </p>
+    </div>
+
+    <!-- Polaroid Grid -->
+    <div id="polaroidGrid" class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
+      <!-- Polaroid items rendered here -->
+    </div>
+    <p id="emptyGalleryMsg" class="text-center text-sm text-gray-400 mt-8 italic">
+      Belum ada foto yang diunggah. Yuk tambahkan momen pertama! 🌸
+    </p>
+  </section>
+
+  <!-- Video Memories Section -->
+  <section id="video" class="py-12 px-4 max-w-4xl mx-auto">
+    <div class="bg-white/90 border border-pink-100 rounded-3xl p-6 sm:p-10 shadow-lg shadow-pink-500/5 text-center">
+      <span class="inline-block px-3 py-1 rounded-full bg-rose-100 text-rose-600 text-[11px] font-bold tracking-widest uppercase">
+        Motion Memories
+      </span>
+      <h2 class="font-serif-display text-3xl sm:text-4xl font-bold text-gray-900 mt-2">
+        Video Ucapan & Momen 🎥
+      </h2>
+      <p class="text-sm text-gray-500 mt-1">
+        Unggah video singkat (maks. ~700 KB agar tersimpan di Cloud gratis) untuk dikenang bersama
+      </p>
+
+      <div class="mt-6">
+        <label for="videoInput" class="cursor-pointer inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-pink-50 border border-pink-200 text-pink-600 font-semibold text-sm hover:bg-pink-100 transition">
+          <span>🎬 Pilih Video Kenangan</span>
+        </label>
+        <input id="videoInput" type="file" accept="video/*" class="hidden" />
+      </div>
+
+      <div id="videoGrid" class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+        <!-- Videos rendered here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Heartfelt Digital Letter Section -->
+  <section id="surat" class="py-16 px-4 max-w-3xl mx-auto">
+    <div class="text-center mb-8">
+      <p class="text-xs font-bold uppercase tracking-widest text-pink-500">A Little Note For You</p>
+      <h2 class="font-serif-display text-3xl sm:text-4xl font-bold text-gray-900 mt-1">
+        Surat Kecil untuk Aviva 💌
+      </h2>
+    </div>
+
+    <div class="envelope-wrapper">
+      <div id="closedEnvelope" class="cursor-pointer bg-gradient-to-br from-pink-100 via-rose-50 to-amber-50 border border-pink-200 rounded-3xl p-10 text-center shadow-xl hover:shadow-2xl transition transform hover:-translate-y-1">
+        <div class="w-16 h-16 mx-auto rounded-full bg-white shadow-md flex items-center justify-center text-3xl mb-4">
+          ✉️
+        </div>
+        <h3 class="font-serif-display text-2xl font-bold text-gray-800">Ada Pesan Spesial Untukmu</h3>
+        <p class="text-sm text-gray-500 mt-1">Klik amplop ini untuk membuka suratnya</p>
+        <span class="inline-block mt-5 px-5 py-2 rounded-full bg-pink-500 text-white text-xs font-semibold">
+          Buka Surat ✨
+        </span>
+      </div>
+
+      <div id="openedLetter" class="hidden letter-paper rounded-3xl p-7 sm:p-12 relative">
+        <button id="closeLetterBtn" class="absolute top-5 right-5 text-xs text-gray-400 hover:text-pink-600 font-medium">
+          Tutup ✕
+        </button>
+        <p class="font-serif-display italic text-xl text-pink-600 mb-4">Dear Aviva Qomaria,</p>
+        <div class="space-y-4 text-sm sm:text-base text-gray-700 leading-relaxed">
+          <p>
+            Selamat ulang tahun ya! Di hari yang spesial ini, aku cuma mau bilang terima kasih sudah menjadi pribadi yang begitu baik, tulus, dan selalu membawa energi positif buat orang-orang di sekitarmu.
+          </p>
+          <p>
+            Semoga di usia yang baru ini, semua doa baik yang kamu langitkan perlahan menemukan jalannya untuk terwujud. Jangan pernah ragu sama kemampuan dirimu sendiri, karena kamu jauh lebih hebat dan kuat dari yang kamu kira.
+          </p>
+          <p>
+            Tetaplah bahagia, tetap jaga kesehatan, dan semoga hari-harimu ke depan selalu dipenuhi tawa, ketenangan, dan keberkahan.
+          </p>
+        </div>
+        <div class="mt-8 pt-6 border-t border-pink-100 flex items-center justify-between">
+          <div>
+            <p class="text-xs text-gray-400">Dengan penuh doa terbaik,</p>
+            <p class="font-serif-display italic text-lg font-bold text-gray-800">Someone who appreciates you 🌸</p>
+          </div>
+          <span class="text-2xl">🎂✨</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-10 text-center text-xs text-gray-400 border-t border-pink-100/60 mt-10">
+    <p>Made with ♡ specially for <strong class="text-pink-500">Aviva Qomaria</strong> • 17 November</p>
+  </footer>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Main App & Firebase Cloud Sync -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      deleteDoc,
+      doc,
+      onSnapshot,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Konfigurasi Firebase Tertanam Permanen (Project: aviva-c7376)
+    const firebaseConfig = {
+      apiKey: "AIzaSyD9-bINU2HQMDjEwlH3T6yo6xwH_z8kavQ",
+      authDomain: "aviva-c7376.firebaseapp.com",
+      databaseURL: "https://aviva-c7376-default-rtdb.firebaseio.com",
+      projectId: "aviva-c7376",
+      storageBucket: "aviva-c7376.firebasestorage.app",
+      messagingSenderId: "598103085538",
+      appId: "1:598103085538:web:95c160211454f383c3e9bb",
+      measurementId: "G-F5HP6PRQ0D"
+    };
+
+    // Toast Helper
+    const toastEl = document.getElementById('toast');
+    const toastBox = document.getElementById('toastBox');
+    const toastIcon = document.getElementById('toastIcon');
+    const toastMsg = document.getElementById('toastMsg');
+    let toastTimer = null;
+
+    function showToast(message, type = 'info') {
+      toastMsg.textContent = message;
+      if (type === 'error') {
+        toastBox.className = 'px-5 py-3 rounded-2xl shadow-xl text-sm font-medium flex items-center gap-2.5 bg-rose-600 text-white';
+        toastIcon.textContent = '⚠️';
+      } else if (type === 'success') {
+        toastBox.className = 'px-5 py-3 rounded-2xl shadow-xl text-sm font-medium flex items-center gap-2.5 bg-emerald-600 text-white';
+        toastIcon.textContent = '✅';
+      } else {
+        toastBox.className = 'px-5 py-3 rounded-2xl shadow-xl text-sm font-medium flex items-center gap-2.5 bg-gray-900 text-white';
+        toastIcon.textContent = '✨';
+      }
+      toastEl.classList.remove('opacity-0', '-translate-y-3');
+      toastEl.classList.add('opacity-100', 'translate-y-0');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toastEl.classList.remove('opacity-100', 'translate-y-0');
+        toastEl.classList.add('opacity-0', '-translate-y-3');
+      }, 3500);
+    }
+
+    // Age Counter (Born 17 Nov 2006)
+    const birthDate = new Date('2006-11-17T00:00:00+07:00');
+    function updateAgeCounter() {
+      const now = new Date();
+      const diffMs = now - birthDate;
+      const totalSeconds = Math.floor(diffMs / 1000);
+      const totalHours = Math.floor(totalSeconds / 3600);
+      const totalDays = Math.floor(totalHours / 24);
+
+      let years = now.getFullYear() - birthDate.getFullYear();
+      const m = now.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && now.getDate() < birthDate.getDate())) {
+        years--;
+      }
+
+      document.getElementById('ageYears').textContent = years;
+      document.getElementById('ageDays').textContent = totalDays.toLocaleString('id-ID');
+      document.getElementById('ageHours').textContent = totalHours.toLocaleString('id-ID');
+      document.getElementById('ageSeconds').textContent = totalSeconds.toLocaleString('id-ID');
+    }
+    updateAgeCounter();
+    setInterval(updateAgeCounter, 1000);
+
+    // Web Audio API Happy Birthday Melody Player
+    let audioCtx = null;
+    let isPlaying = false;
+    let noteTimeout = null;
+    const notes = [
+      { f: 261.63, d: 0.35 }, { f: 261.63, d: 0.35 }, { f: 293.66, d: 0.7 }, { f: 261.63, d: 0.7 }, { f: 349.23, d: 0.7 }, { f: 329.63, d: 1.2 },
+      { f: 261.63, d: 0.35 }, { f: 261.63, d: 0.35 }, { f: 293.66, d: 0.7 }, { f: 261.63, d: 0.7 }, { f: 392.00, d: 0.7 }, { f: 349.23, d: 1.2 },
+      { f: 261.63, d: 0.35 }, { f: 261.63, d: 0.35 }, { f: 523.25, d: 0.7 }, { f: 440.00, d: 0.7 }, { f: 349.23, d: 0.7 }, { f: 329.63, d: 0.7 }, { f: 293.66, d: 1.2 },
+      { f: 466.16, d: 0.35 }, { f: 466.16, d: 0.35 }, { f: 440.00, d: 0.7 }, { f: 349.23, d: 0.7 }, { f: 392.00, d: 0.7 }, { f: 349.23, d: 1.4 }
+    ];
+    let noteIndex = 0;
+
+    function playNextNote() {
+      if (!isPlaying) return;
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const n = notes[noteIndex];
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(n.f, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + n.d);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + n.d);
+
+      noteIndex = (noteIndex + 1) % notes.length;
+      noteTimeout = setTimeout(playNextNote, n.d * 1000 + 60);
+    }
+
+    const musicToggleBtn = document.getElementById('musicToggleBtn');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const musicStatusText = document.getElementById('musicStatusText');
+    const eqBars = document.getElementById('eqBars');
+
+    musicToggleBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+        musicStatusText.textContent = 'Playing melody ♪';
+        eqBars.classList.add('eq-playing');
+        playNextNote();
+      } else {
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+        musicStatusText.textContent = 'Tap to play music ♡';
+        eqBars.classList.remove('eq-playing');
+        clearTimeout(noteTimeout);
+      }
+    });
+
+    // Confetti & Envelope
+    document.getElementById('celebrateBtn').addEventListener('click', () => {
+      confetti({ particleCount: 90, spread: 75, origin: { y: 0.6 }, colors: ['#EC4899', '#F43F5E', '#FBBF24', '#FBCFE8'] });
+    });
+
+    const closedEnvelope = document.getElementById('closedEnvelope');
+    const openedLetter = document.getElementById('openedLetter');
+    closedEnvelope.addEventListener('click', () => {
+      closedEnvelope.classList.add('hidden');
+      openedLetter.classList.remove('hidden');
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+    });
+    document.getElementById('closeLetterBtn').addEventListener('click', () => {
+      openedLetter.classList.add('hidden');
+      closedEnvelope.classList.remove('hidden');
+    });
+
+    // Image Compression Helper (keeps Firestore docs lightweight & fast across devices)
+    function compressImage(file, maxWidth = 800, quality = 0.72) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Cloud Backend Initialization
+    const cloudDot = document.getElementById('cloudDot');
+    const cloudStatusText = document.getElementById('cloudStatusText');
+    const polaroidGrid = document.getElementById('polaroidGrid');
+    const emptyGalleryMsg = document.getElementById('emptyGalleryMsg');
+    const videoGrid = document.getElementById('videoGrid');
+
+    let db = null;
+    const rotations = ['-rotate-2', 'rotate-1', '-rotate-1', 'rotate-2'];
+
+    function renderPolaroids(items) {
+      polaroidGrid.innerHTML = '';
+      if (!items || items.length === 0) {
+        emptyGalleryMsg.classList.remove('hidden');
+        return;
+      }
+      emptyGalleryMsg.classList.add('hidden');
+
+      items.forEach((item, idx) => {
+        const rot = rotations[idx % rotations.length];
+        const card = document.createElement('div');
+        card.className = `polaroid-card relative group ${rot}`;
+        card.innerHTML = `
+          <button data-id="${item.id}" class="delete-photo-btn opacity-0 group-hover:opacity-100 transition absolute top-4 right-4 z-10 w-7 h-7 rounded-full bg-black/60 text-white text-xs flex items-center justify-center hover:bg-rose-600" title="Hapus foto">✕</button>
+          <div class="aspect-square w-full overflow-hidden rounded bg-pink-50">
+            <img src="${item.dataUrl}" alt="${item.caption || 'Memory'}" class="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <p class="font-serif-display italic text-lg text-center text-gray-700 mt-3 px-2 truncate">
+            ${item.caption || 'Sweet Memory ♡'}
+          </p>
+        `;
+        polaroidGrid.appendChild(card);
+      });
+
+      document.querySelectorAll('.delete-photo-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const id = e.currentTarget.dataset.id;
+          if (!db || !id) return;
+          try {
+            await deleteDoc(doc(db, 'aviva_photos', id));
+            showToast('Foto dihapus dari Cloud', 'info');
+          } catch (err) {
+            showToast('Gagal menghapus foto', 'error');
+          }
+        });
+      });
+    }
+
+    function renderVideos(items) {
+      videoGrid.innerHTML = '';
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'bg-pink-50/50 border border-pink-100 rounded-2xl p-3 relative group';
+        card.innerHTML = `
+          <button data-id="${item.id}" class="delete-video-btn opacity-0 group-hover:opacity-100 transition absolute top-5 right-5 z-10 w-7 h-7 rounded-full bg-black/60 text-white text-xs flex items-center justify-center hover:bg-rose-600">✕</button>
+          <video src="${item.dataUrl}" controls class="w-full rounded-xl max-h-64 bg-black"></video>
+          <p class="text-xs font-medium text-gray-600 mt-2 px-1">${item.caption || 'Video Kenangan 🎥'}</p>
+        `;
+        videoGrid.appendChild(card);
+      });
+
+      document.querySelectorAll('.delete-video-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          const id = e.currentTarget.dataset.id;
+          if (!db || !id) return;
+          try {
+            await deleteDoc(doc(db, 'aviva_videos', id));
+            showToast('Video dihapus', 'info');
+          } catch (err) {
+            showToast('Gagal menghapus video', 'error');
+          }
+        });
+      });
+    }
+
+    async function initCloud() {
+      try {
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        await signInAnonymously(auth);
+        db = getFirestore(app);
+
+        cloudDot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
+        cloudStatusText.textContent = 'Cloud Tersambung • Sinkron Semua Perangkat';
+
+        // Real-time listener untuk Foto
+        const photosQuery = query(collection(db, 'aviva_photos'), orderBy('createdAt', 'desc'));
+        onSnapshot(photosQuery, (snapshot) => {
+          const photos = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+          renderPolaroids(photos);
+        }, (err) => {
+          console.error(err);
+          cloudDot.className = 'w-2.5 h-2.5 rounded-full bg-rose-500';
+          cloudStatusText.textContent = 'Izin Firestore Ditolak (Cek Rules)';
+        });
+
+        // Real-time listener untuk Video
+        const videosQuery = query(collection(db, 'aviva_videos'), orderBy('createdAt', 'desc'));
+        onSnapshot(videosQuery, (snapshot) => {
+          const videos = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+          renderVideos(videos);
+        });
+
+      } catch (error) {
+        console.error('Firebase Init Error:', error);
+        cloudDot.className = 'w-2.5 h-2.5 rounded-full bg-rose-500';
+        cloudStatusText.textContent = 'Koneksi Gagal (Aktifkan Anonymous Auth)';
+      }
+    }
+
+    // Upload Photo Handler
+    document.getElementById('photoInput').addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      if (!db) {
+        showToast('Database Cloud belum siap, cek koneksi/Firebase Rules.', 'error');
+        return;
+      }
+
+      showToast(`Mengunggah ${files.length} foto ke Cloud...`, 'info');
+      for (const file of files) {
+        try {
+          const compressedDataUrl = await compressImage(file);
+          const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+          await addDoc(collection(db, 'aviva_photos'), {
+            dataUrl: compressedDataUrl,
+            caption: cleanName || 'Sweet Memory ♡',
+            createdAt: Date.now()
+          });
+        } catch (err) {
+          console.error(err);
+          showToast(`Gagal mengunggah ${file.name}`, 'error');
+        }
+      }
+      showToast('Foto tersimpan & sinkron ke semua HP/laptop!', 'success');
+      e.target.value = '';
+    });
+
+    // Upload Video Handler
+    document.getElementById('videoInput').addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      if (!db) {
+        showToast('Database Cloud belum siap.', 'error');
+        return;
+      }
+      if (file.size > 750 * 1024) {
+        showToast('Ukuran video maksimal 750 KB untuk mode Cloud gratis.', 'error');
+        e.target.value = '';
+        return;
+      }
+
+      showToast('Mengunggah video ke Cloud...', 'info');
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        try {
+          await addDoc(collection(db, 'aviva_videos'), {
+            dataUrl: ev.target.result,
+            caption: file.name.replace(/\.[^/.]+$/, ''),
+            createdAt: Date.now()
+          });
+          showToast('Video berhasil disimpan ke Cloud!', 'success');
+        } catch (err) {
+          showToast('Gagal menyimpan video (ukuran terlalu besar).', 'error');
+        }
+      };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+    });
+
+    initCloud();
+  </script>
+</body>
+</html>
